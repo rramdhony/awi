@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWI Partners, Africa Workforce Intelligence</title>
+  <meta name="description" content="AWI Partners helps companies expand into Africa with structured market entry, workforce strategy, compliance planning and AI-enabled delivery." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --ink:       #0E0D0A;
+      --ink-soft:  #1A1916;
+      --cream:     #F3EDE2;
+      --cream-dim: #DDD6C8;
+      --amber:     #C8882A;
+      --amber-lt:  #E0A84A;
+      --dust:      #7A6E60;
+      --rule:      rgba(200,136,42,.25);
+      --font-disp: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'DM Sans', system-ui, sans-serif;
+    }
+
+    /* ── RESET ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      background: var(--ink);
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    /* ── UTILITY ─────────────────────────────────────────── */
+    .amber { color: var(--amber); }
+    .italic { font-style: italic; }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin-inline: auto;
+    }
+    .section { padding: 120px 0; }
+    .section--tight { padding: 80px 0; }
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.4rem;
+    }
+    .display {
+      font-family: var(--font-disp);
+      font-size: clamp(2.6rem, 5.5vw, 5rem);
+      font-weight: 300;
+      line-height: 1.08;
+      letter-spacing: -.01em;
+    }
+    .display--lg {
+      font-size: clamp(3.2rem, 7vw, 7rem);
+    }
+    .rule-top { border-top: 1px solid var(--rule); padding-top: 2rem; }
+
+    /* grid strips */
+    .bg-strip {
+      background: var(--ink-soft);
+    }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0;
+      transition: background .35s, box-shadow .35s;
+    }
+    nav.scrolled {
+      background: rgba(14,13,10,.92);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 var(--rule);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 90%;
+      max-width: 1200px;
+      margin-inline: auto;
+      height: 72px;
+    }
+    .nav-brand {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .nav-logo {
+      height: 48px;
+      width: auto;
+      display: block;
+    }
+    .hero-logo {
+      height: 120px;
+      width: auto;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp .8s .15s forwards;
+      filter: drop-shadow(0 4px 24px rgba(200,136,42,.18));
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.4rem;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: .82rem;
+      letter-spacing: .06em;
+      color: var(--cream-dim);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+    .btn {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .7rem 1.6rem;
+      border: 1px solid var(--amber);
+      color: var(--amber);
+      background: transparent;
+      cursor: pointer;
+      transition: background .25s, color .25s;
+    }
+    .btn:hover {
+      background: var(--amber);
+      color: var(--ink);
+    }
+    .btn--solid {
+      background: var(--amber);
+      color: var(--ink);
+    }
+    .btn--solid:hover {
+      background: var(--amber-lt);
+      border-color: var(--amber-lt);
+    }
+    .btn--lg {
+      font-size: .84rem;
+      padding: .9rem 2.2rem;
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: transparent;
+      border: 0;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--cream);
+      transition: all .3s;
+    }
+
+    /* ── MOBILE NAV ──────────────────────────────────────── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--ink);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: var(--font-disp);
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--cream);
+    }
+    .mobile-menu .btn { font-size: .9rem; padding: .9rem 2.4rem; }
+
+    /* ── HERO ────────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 100svh;
+      display: grid;
+      align-content: center;
+      overflow: hidden;
+      padding-top: 72px;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    /* ── video background ── */
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      opacity: 0.55;
+      /* shift the frame left so Mauritius hub sits toward the right
+         of the viewport rather than dead-centre */
+      transform: scale(1.08) translateX(-4%);
+    }
+
+    /* dark scrim so headline text stays legible */
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to right, rgba(14,13,10,.82) 0%, rgba(14,13,10,.45) 55%, rgba(14,13,10,.25) 100%),
+        linear-gradient(to bottom, rgba(14,13,10,.3) 0%, transparent 30%, rgba(14,13,10,.6) 100%);
+    }
+
+    /* subtle grid/map texture -- sits above video, below text */
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background-image:
+        linear-gradient(rgba(200,136,42,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,136,42,.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      right: -10%;
+      top: -10%;
+      width: 70vw;
+      height: 70vw;
+      max-width: 900px;
+      max-height: 900px;
+      border-radius: 50%;
+      z-index: 1;
+      background: radial-gradient(circle, rgba(200,136,42,.07) 0%, rgba(200,136,42,.02) 38%, transparent 72%);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: 90%;
+      max-width: 1200px;
+      margin-inline: auto;
+      padding: 80px 0;
+    }
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      font-size: .7rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 2.4rem;
+      opacity: 0;
+      animation: fadeUp .8s .2s forwards;
+    }
+    .hero-tag::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--amber);
+    }
+    .hero-headline {
+      font-family: var(--font-disp);
+      font-size: clamp(3rem, 7.5vw, 7.5rem);
+      font-weight: 300;
+      line-height: 1.0;
+      letter-spacing: -.02em;
+      max-width: 820px;
+      opacity: 0;
+      animation: fadeUp .9s .4s forwards;
+    }
+    .hero-headline em {
+      font-style: italic;
+      color: var(--amber);
+    }
+    .hero-sub {
+      max-width: 560px;
+      margin-top: 2rem;
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--cream-dim);
+      line-height: 1.75;
+      opacity: 0;
+      animation: fadeUp .9s .6s forwards;
+    }
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2.8rem;
+      opacity: 0;
+      animation: fadeUp .9s .8s forwards;
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 2.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+      font-size: .65rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--dust);
+      opacity: 0;
+      animation: fadeIn 1s 1.4s forwards;
+    }
+    .hero-scroll .line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--amber), transparent);
+      animation: scrollLine 2s 1.6s ease-in-out infinite;
+    }
+
+    /* ── SECTION: OUTCOMES ───────────────────────────────── */
+    .outcomes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border: 1px solid var(--rule);
+    }
+    .outcome-item {
+      padding: 2.4rem 2.8rem;
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+      transition: background .3s;
+    }
+    .outcome-item:nth-child(even) { border-right: none; }
+    .outcome-item:nth-last-child(-n+2) { border-bottom: none; }
+    .outcome-item:hover { background: rgba(200,136,42,.04); }
+    .outcome-num {
+      font-family: var(--font-disp);
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: var(--amber);
+      opacity: .25;
+      line-height: 1;
+      margin-bottom: .8rem;
+    }
+    .outcome-text {
+      font-size: 1rem;
+      color: var(--cream-dim);
+      font-weight: 300;
+    }
+    .outcome-text strong {
+      display: block;
+      font-family: var(--font-disp);
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: var(--cream);
+      margin-bottom: .3rem;
+      line-height: 1.3;
+    }
+
+    /* ── SECTION: WHAT WE DO ─────────────────────────────── */
+    .services-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+    }
+    .services-sticky {
+      position: sticky;
+      top: 100px;
+    }
+    .service-list { margin-top: 3rem; }
+    .service-item {
+      padding: 2rem 0;
+      border-top: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      gap: 1.2rem;
+      align-items: start;
+    }
+    .service-idx {
+      font-family: var(--font-disp);
+      font-size: .85rem;
+      color: var(--amber);
+      padding-top: .15rem;
+    }
+    .service-content h3 {
+      font-family: var(--font-disp);
+      font-size: 1.4rem;
+      font-weight: 500;
+      margin-bottom: .5rem;
+    }
+    .service-content p {
+      font-size: .92rem;
+      color: var(--cream-dim);
+      line-height: 1.7;
+    }
+
+    /* ── SECTION: HOW IT WORKS ───────────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: var(--rule);
+    }
+    .step {
+      padding: 0 1.5rem;
+      padding-top: 0;
+      text-align: center;
+    }
+    .step-dot {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--amber);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-inline: auto;
+      margin-bottom: 1.6rem;
+      background: var(--ink);
+      position: relative;
+      z-index: 1;
+      font-family: var(--font-disp);
+      font-size: 1.1rem;
+      color: var(--amber);
+      transition: background .3s;
+    }
+    .step:hover .step-dot {
+      background: var(--amber);
+      color: var(--ink);
+    }
+    .step h3 {
+      font-family: var(--font-disp);
+      font-size: 1.15rem;
+      font-weight: 500;
+      margin-bottom: .6rem;
+    }
+    .step p {
+      font-size: .85rem;
+      color: var(--cream-dim);
+      line-height: 1.65;
+    }
+
+    /* ── SECTION: USE CASES ──────────────────────────────── */
+    .cases {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--rule);
+    }
+    .case {
+      background: var(--ink);
+      padding: 3rem 2.4rem;
+      position: relative;
+      overflow: hidden;
+      transition: background .3s;
+    }
+    .case::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(200,136,42,.06) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .case:hover { background: var(--ink-soft); }
+    .case:hover::before { opacity: 1; }
+    .case-country {
+      font-size: .68rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.2rem;
+    }
+    .case h3 {
+      font-family: var(--font-disp);
+      font-size: 1.6rem;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .case p {
+      font-size: .9rem;
+      color: var(--cream-dim);
+      line-height: 1.7;
+      margin-bottom: 1.8rem;
+    }
+    .case-outcomes { border-top: 1px solid var(--rule); padding-top: 1.4rem; }
+    .case-outcomes li {
+      font-size: .85rem;
+      color: var(--cream-dim);
+      padding: .35rem 0;
+      display: flex;
+      align-items: flex-start;
+      gap: .6rem;
+    }
+    .case-outcomes li::before {
+      content: '→';
+      color: var(--amber);
+      flex-shrink: 0;
+      margin-top: .02em;
+    }
+
+    /* ── SECTION: OUR DIFFERENCE ────────────────────────── */
+    .diff-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .diff-quote {
+      font-family: var(--font-disp);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 300;
+      line-height: 1.3;
+      color: var(--cream);
+      border-left: 2px solid var(--amber);
+      padding-left: 2rem;
+    }
+    .diff-quote em { color: var(--amber); font-style: italic; }
+    .diff-pillars { margin-top: 2rem; }
+    .pillar {
+      padding: 1.4rem 0;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1.4rem 1fr;
+      gap: 1rem;
+      align-items: start;
+    }
+    .pillar-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--amber);
+      margin-top: .55rem;
+      flex-shrink: 0;
+    }
+    .pillar h4 {
+      font-family: var(--font-disp);
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: .3rem;
+    }
+    .pillar p {
+      font-size: .88rem;
+      color: var(--cream-dim);
+    }
+
+    /* ── SECTION: FOUNDERS ───────────────────────────────── */
+    .founders {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+    .founder {
+      padding: 3rem;
+      border: 1px solid var(--rule);
+      position: relative;
+      transition: border-color .3s;
+    }
+    .founder:hover { border-color: rgba(200,136,42,.5); }
+    .founder-role {
+      font-size: .68rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+    .founder h3 {
+      font-family: var(--font-disp);
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: .3rem;
+    }
+    .founder-title {
+      font-family: var(--font-disp);
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--amber);
+      margin-bottom: 1.6rem;
+      padding-bottom: 1.6rem;
+      border-bottom: 1px solid var(--rule);
+    }
+    .founder-bio {
+      font-size: .92rem;
+      color: var(--cream-dim);
+      line-height: 1.8;
+      margin-bottom: 1.6rem;
+    }
+    .founder-creds {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem;
+    }
+    .cred {
+      font-size: .68rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: .3rem .75rem;
+      border: 1px solid var(--rule);
+      color: var(--dust);
+    }
+    .founder-together {
+      grid-column: 1 / -1;
+      border: 1px solid var(--rule);
+      border-top: 2px solid var(--amber);
+      padding: 2.8rem 3rem;
+      background: rgba(200,136,42,.03);
+    }
+    .founder-together p {
+      font-family: var(--font-disp);
+      font-size: clamp(1.3rem, 2.5vw, 1.85rem);
+      font-weight: 300;
+      line-height: 1.55;
+      color: var(--cream);
+      max-width: 820px;
+    }
+    .founder-together p em { color: var(--amber); font-style: italic; }
+    .founder-photo-wrap {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.6rem;
+      margin-bottom: 1.6rem;
+    }
+    .founder-photo {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center top;
+      border: 2px solid rgba(200,136,42,.4);
+      flex-shrink: 0;
+      filter: grayscale(15%);
+      transition: filter .4s, border-color .3s;
+    }
+    .founder:hover .founder-photo {
+      filter: grayscale(0%);
+      border-color: var(--amber);
+    }
+    .founder-photo-meta { flex: 1; }
+
+    /* ── SECTION: CONTACT ────────────────────────────────── */
+    #contact {
+      background: var(--ink-soft);
+      padding: 120px 0;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #contact::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,136,42,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,136,42,.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .contact-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .contact-form {
+      max-width: 540px;
+      margin: 3rem auto 0;
+      display: grid;
+      gap: 1rem;
+    }
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--rule);
+      color: var(--cream);
+      font-family: var(--font-body);
+      font-size: .9rem;
+      font-weight: 300;
+      padding: 1rem 1.2rem;
+      outline: none;
+      transition: border-color .2s;
+      -webkit-appearance: none;
+    }
+    .contact-form input::placeholder,
+    .contact-form textarea::placeholder { color: var(--dust); }
+    .contact-form input:focus,
+    .contact-form select:focus,
+    .contact-form textarea:focus { border-color: var(--amber); }
+    .contact-form select option { background: var(--ink); }
+    .contact-form textarea { resize: vertical; min-height: 110px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--rule);
+    }
+    .footer-partners {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.6rem 0;
+      border-bottom: 1px solid var(--rule);
+    }
+    .footer-partners-label {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--dust);
+      flex-shrink: 0;
+    }
+    .footer-partner-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+    .footer-partner-link:hover { opacity: 1; }
+    .footer-partner-logo {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+    .footer-partner-logo--light {
+      height: 28px;
+      padding: 4px 10px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 4px;
+    }
+    .footer-partner-logo--portrait {
+      height: 44px;
+      padding: 4px 8px;
+    }
+    .footer-partner-desc {
+      font-size: 0.75rem;
+      color: var(--dust);
+      letter-spacing: 0.06em;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 2.4rem 0;
+    }
+    .footer-brand {
+      font-family: var(--font-disp);
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    .footer-brand span { color: var(--amber); }
+    .footer-copy {
+      font-size: .78rem;
+      color: var(--dust);
+    }
+    .footer-links {
+      display: flex;
+      gap: 1.8rem;
+    }
+    .footer-links a {
+      font-size: .78rem;
+      color: var(--dust);
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: var(--cream); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-video { display: none; }
+    }
+
+    /* ── ANIMATIONS ──────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(1); opacity: 1; }
+      50%       { transform: scaleY(.4); opacity: .4; }
+    }
+
+    /* scroll-reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .7s, transform .7s;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+    .reveal-delay-5 { transition-delay: .5s; }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .section { padding: 80px 0; }
+      .services-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .services-sticky { position: static; }
+      .steps { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+      .steps::before { display: none; }
+      .step { text-align: left; padding: 0; }
+      .step-dot { margin-inline: 0; }
+      .cases { grid-template-columns: 1fr; }
+      .diff-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .founders { grid-template-columns: 1fr; gap: 2rem; }
+      .founder-together { grid-column: 1; }
+      .outcomes-grid { grid-template-columns: 1fr; }
+      .outcome-item:nth-child(even) { border-right: 1px solid var(--rule); }
+      .outcome-item:nth-last-child(-n+2) { border-bottom: 1px solid var(--rule); }
+      .outcome-item:last-child { border-bottom: none; }
+      .form-row { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .steps { grid-template-columns: 1fr; }
+      .footer-partners {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .footer-partner-desc { display: none; }
+      .footer-partner-logo { height: 28px; }
+    }
+    @media (max-width: 480px) {
+      .hero-headline { font-size: 2.8rem; }
+      .display { font-size: 2.2rem; }
+    }
+
+    .founder-linkedin {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      transition: opacity 0.2s;
+    }
+    .founder-linkedin:hover { opacity: 0.75; }
+    .network-icon {
+      width: 88px;
+      height: 88px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(200,136,42,.4);
+      border-radius: 50%;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── NAV ─────────────────────────────────────────────── -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-brand">
+        <img src="logo.png" alt="AWI Partners, Africa Workforce Intelligence" class="nav-logo" />
+      </a>
+      <div class="nav-links">
+        <a href="#what-we-do">What We Do</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#use-cases">Use Cases</a>
+        <a href="#about">About</a>
+        <a href="#contact" class="btn">Book a Consultation</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu" type="button">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#what-we-do" class="mobile-link">What We Do</a>
+    <a href="#how-it-works" class="mobile-link">How It Works</a>
+    <a href="#use-cases" class="mobile-link">Use Cases</a>
+    <a href="#about" class="mobile-link">About</a>
+    <a href="#contact" class="btn btn--solid mobile-link">Book a Consultation</a>
+  </div>
+
+  <!-- ── HERO ─────────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-bg">
+      <video
+        class="hero-video"
+        src="https://pub-31c616ea8a044758ade2bd1dff1dfbd9.r2.dev/africa-network.mp4"
+        autoplay
+        loop
+        muted
+        playsinline
+        preload="auto"
+        aria-hidden="true"
+      ></video>
+      <div class="hero-scrim"></div>
+    </div>
+
+    <div class="hero-inner">
+      <div class="hero-tag">AWI Partners, Africa Expansion, Structured &amp; Intelligent</div>
+      <img src="logo.png" alt="AWI Partners" class="hero-logo" />
+      <h1 class="hero-headline">
+        A smarter way to<br />
+        <em>expand into Africa</em>
+      </h1>
+      <p class="hero-sub">
+        We combine deep workforce expertise with structured systems and AI-enabled delivery to help companies enter, operate and scale across Africa, with clarity, speed and control.
+      </p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn--solid btn--lg">Book a Consultation</a>
+        <a href="#what-we-do" class="btn btn--lg">What We Do</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll">
+      <div class="line"></div>
+      <span>Scroll</span>
+    </div>
+  </section>
+
+  <!-- ── OUTCOMES ─────────────────────────────────────────── -->
+  <section class="section" id="outcomes">
+    <div class="container">
+      <div class="eyebrow reveal">What you walk away with</div>
+      <h2 class="display reveal reveal-delay-1" style="max-width:640px; margin-bottom:3.5rem;">
+        Clarity you can<br /><em class="italic">act on</em>
+      </h2>
+      <div class="outcomes-grid">
+        <div class="outcome-item reveal">
+          <div class="outcome-num">01</div>
+          <div class="outcome-text">
+            <strong>Market Recommendation</strong>
+            A clear, evidence-based recommendation on which African markets to enter and in what sequence.
+          </div>
+        </div>
+        <div class="outcome-item reveal reveal-delay-1">
+          <div class="outcome-num">02</div>
+          <div class="outcome-text">
+            <strong>Workforce Model</strong>
+            A defined structure, EOR, local entity, or hybrid, matched to your business goals and risk tolerance.
+          </div>
+        </div>
+        <div class="outcome-item reveal reveal-delay-2">
+          <div class="outcome-num">03</div>
+          <div class="outcome-text">
+            <strong>Compliance Roadmap</strong>
+            Full regulatory and employment framework coverage for every market you are entering.
+          </div>
+        </div>
+        <div class="outcome-item reveal reveal-delay-3">
+          <div class="outcome-num">04</div>
+          <div class="outcome-text">
+            <strong>Risk &amp; Mitigation Map</strong>
+            A clear view of what can go wrong and exactly how to prevent it.
+          </div>
+        </div>
+        <div class="outcome-item reveal reveal-delay-4">
+          <div class="outcome-num">05</div>
+          <div class="outcome-text">
+            <strong>Expansion Plan</strong>
+            A structured, step-by-step execution plan your team can follow from day one.
+          </div>
+        </div>
+        <div class="outcome-item reveal reveal-delay-5">
+          <div class="outcome-num">06</div>
+          <div class="outcome-text">
+            <strong>Execution Support</strong>
+            Onboarding, compliance rollout and operational setup, delivered, not just advised.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WHAT WE DO ────────────────────────────────────────── -->
+  <section class="section bg-strip" id="what-we-do">
+    <div class="container">
+      <div class="services-layout">
+        <div class="services-sticky">
+          <div class="eyebrow reveal">What We Do</div>
+          <h2 class="display reveal reveal-delay-1">
+            Africa expansion,<br /><em class="italic">structured<br />and delivered</em>
+          </h2>
+          <p class="reveal reveal-delay-2" style="margin-top:1.6rem; color:var(--cream-dim); font-size:.98rem; max-width:380px; line-height:1.8;">
+            From the decision to expand through to workforce deployed and compliant, we cover every stage with operational rigour and technology-enabled precision.
+          </p>
+          <div style="margin-top:2.4rem;" class="reveal reveal-delay-3">
+            <a href="#contact" class="btn">Start your expansion plan →</a>
+          </div>
+        </div>
+        <div class="service-list">
+          <div class="service-item reveal">
+            <span class="service-idx">01</span>
+            <div class="service-content">
+              <h3>Market Entry Strategy</h3>
+              <p>We identify the right markets for your business, assess the fastest and safest routes in, and give you a clear, defensible recommendation, not a list of options.</p>
+            </div>
+          </div>
+          <div class="service-item reveal reveal-delay-1">
+            <span class="service-idx">02</span>
+            <div class="service-content">
+              <h3>Workforce Structuring</h3>
+              <p>EOR, local entity or hybrid, we design the right model based on your goals, timeline and risk appetite. Built on real operational knowledge of how each model performs in practice across Africa.</p>
+            </div>
+          </div>
+          <div class="service-item reveal reveal-delay-2">
+            <span class="service-idx">03</span>
+            <div class="service-content">
+              <h3>Compliance &amp; Risk</h3>
+              <p>Regulatory requirements, tax frameworks, employment law and country-specific risk, mapped in full, with mitigation strategies for every exposure identified.</p>
+            </div>
+          </div>
+          <div class="service-item reveal reveal-delay-3">
+            <span class="service-idx">04</span>
+            <div class="service-content">
+              <h3>Execution &amp; Operations</h3>
+              <p>Onboarding, documentation, workforce deployment and operational setup. We do not hand you a strategy and walk away. We support delivery.</p>
+            </div>
+          </div>
+          <div class="service-item reveal reveal-delay-4">
+            <span class="service-idx">05</span>
+            <div class="service-content">
+              <h3>Technology-Enabled Delivery</h3>
+              <p>Structured systems that accelerate onboarding, standardise workflows, reduce manual errors and give you real-time visibility across countries, because expansion at scale demands more than spreadsheets.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ──────────────────────────────────────── -->
+  <section class="section" id="how-it-works">
+    <div class="container">
+      <div class="eyebrow reveal" style="text-align:center;">How It Works</div>
+      <h2 class="display reveal reveal-delay-1" style="text-align:center; margin-bottom:5rem;">
+        Simple. Structured. <em class="italic">Scalable.</em>
+      </h2>
+      <div class="steps">
+        <div class="step reveal">
+          <div class="step-dot">1</div>
+          <h3>Understand</h3>
+          <p>We define your expansion objectives, timelines, constraints and risk tolerance. No assumptions.</p>
+        </div>
+        <div class="step reveal reveal-delay-1">
+          <div class="step-dot">2</div>
+          <h3>Design</h3>
+          <p>We build a tailored market entry and workforce plan, structured around your business, not a template.</p>
+        </div>
+        <div class="step reveal reveal-delay-2">
+          <div class="step-dot">3</div>
+          <h3>Playbook</h3>
+          <p>A decision-ready blueprint covering structure, compliance and execution. Yours to act on immediately.</p>
+        </div>
+        <div class="step reveal reveal-delay-3">
+          <div class="step-dot">4</div>
+          <h3>Execute</h3>
+          <p>We support onboarding, compliance rollout and operational setup, with structured delivery at every step.</p>
+        </div>
+        <div class="step reveal reveal-delay-4">
+          <div class="step-dot">5</div>
+          <h3>Scale</h3>
+          <p>Additional countries, consistent standards, growing workforce. We scale with you, systematically.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── USE CASES ─────────────────────────────────────────── -->
+  <section class="section bg-strip" id="use-cases">
+    <div class="container">
+      <div class="eyebrow reveal">Use Cases</div>
+      <h2 class="display reveal reveal-delay-1" style="margin-bottom:3.5rem;">
+        Real scenarios.<br /><em class="italic">Real outcomes.</em>
+      </h2>
+      <div class="cases">
+        <div class="case reveal">
+          <div class="case-country">East Africa, Kenya &amp; Tanzania</div>
+          <h3>Entering without setting up entities</h3>
+          <p>A company needs to hire quickly across Kenya and Tanzania. Setting up legal entities is too slow. They need workforce in market, compliantly, within weeks.</p>
+          <p style="font-size:.88rem; color:var(--cream-dim);">We assess EOR versus entity, design the workforce model, navigate local employment frameworks and define a compliant onboarding plan.</p>
+          <ul class="case-outcomes">
+            <li>Fast market entry, workforce deployed in weeks</li>
+            <li>Full regulatory compliance from day one</li>
+            <li>A scalable structure ready to grow with you</li>
+          </ul>
+        </div>
+        <div class="case reveal reveal-delay-1">
+          <div class="case-country">West Africa, Nigeria</div>
+          <h3>Controlled entry into a complex market</h3>
+          <p>Nigeria is a priority market, but perceived risk is creating board-level hesitation. The company needs a clear-eyed risk assessment and a structured entry path.</p>
+          <p style="font-size:.88rem; color:var(--cream-dim);">We map legal and tax exposure, identify key operational risks, quantify them and design a structured entry model that gives the board a defensible decision.</p>
+          <ul class="case-outcomes">
+            <li>Risk mapped, quantified and mitigated</li>
+            <li>A clear board-ready recommendation</li>
+            <li>Controlled expansion with defined guardrails</li>
+          </ul>
+        </div>
+        <div class="case reveal reveal-delay-2">
+          <div class="case-country">Multi-Country, 3 to 5 Markets</div>
+          <h3>Scaling across Africa with consistency</h3>
+          <p>A company has proven one market and now wants to scale across three to five countries. Doing it without a system creates chaos, compliance gaps and inconsistent operations.</p>
+          <p style="font-size:.88rem; color:var(--cream-dim);">We prioritise markets, standardise the workforce model, build the rollout playbook and ensure each market launches to the same operational standard.</p>
+          <ul class="case-outcomes">
+            <li>Faster scaling with less operational friction</li>
+            <li>Consistent compliance standards across markets</li>
+            <li>A system that scales, not just a plan</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── OUR DIFFERENCE ────────────────────────────────────── -->
+  <section class="section">
+    <div class="container">
+      <div class="eyebrow reveal">Our Difference</div>
+      <div class="diff-layout">
+        <div class="reveal reveal-delay-1">
+          <blockquote class="diff-quote">
+            Most advisory firms have never run Africa EOR operations. Most EOR operators have never built intelligence systems. <em>We have done both.</em>
+          </blockquote>
+          <p style="margin-top:2rem; color:var(--cream-dim); font-size:.95rem; line-height:1.8;">
+            This venture was founded to close that gap, to bring operational depth and systems intelligence together into a single, structured offering. The result is Africa expansion that is predictable, auditable and built to scale.
+          </p>
+        </div>
+        <div>
+          <div class="diff-pillars">
+            <div class="pillar reveal">
+              <div class="pillar-dot"></div>
+              <div>
+                <h4>Inside operational knowledge</h4>
+                <p>Our practitioner network brings operational experience built from the inside, across 46 countries, serving multinationals, SMEs and NGOs. We know where it breaks.</p>
+              </div>
+            </div>
+            <div class="pillar reveal reveal-delay-1">
+              <div class="pillar-dot"></div>
+              <div>
+                <h4>Systems built for compliance</h4>
+                <p>Our technology background spans financial services, government and cross-border delivery, environments where a compliance failure costs millions. We design systems that do not fail.</p>
+              </div>
+            </div>
+            <div class="pillar reveal reveal-delay-2">
+              <div class="pillar-dot"></div>
+              <div>
+                <h4>AI-enabled, not AI-dependent</h4>
+                <p>We use artificial intelligence to accelerate decisions, standardise workflows and surface risk, but human expertise drives every recommendation. Intelligence assists; judgement decides.</p>
+              </div>
+            </div>
+            <div class="pillar reveal reveal-delay-3">
+              <div class="pillar-dot"></div>
+              <div>
+                <h4>Iterative delivery, not big-bang consulting</h4>
+                <p>Structured, agile delivery cycles mean you have something you can act on quickly, not a six-month engagement before you see output.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOUNDERS ──────────────────────────────────────────── -->
+  <section class="section bg-strip" id="about">
+    <div class="container">
+      <div class="eyebrow reveal">About</div>
+      <h2 class="display reveal reveal-delay-1" style="margin-bottom:3.5rem;">
+        Built from experience.<br /><em class="italic">Designed for scale.</em>
+      </h2>
+      <div class="founders">
+
+        <div class="founder reveal">
+          <div class="founder-role">Founder &amp; CEO</div>
+          <div class="founder-photo-wrap">
+            <img src="ruben.jpeg" alt="Ruben Ramdhony" class="founder-photo">
+            <div class="founder-photo-meta">
+              <h3>Ruben<br />Ramdhony</h3>
+              <div class="founder-title">AI Systems &amp; Structured Delivery</div>
+            </div>
+          </div>
+          <p class="founder-bio">
+            Ruben has spent the past decade building and running technology businesses in Australia, delivering enterprise-scale programmes across financial services, education and healthcare. As former Chief Information Officer at an AI-first company operating across Australia and the Gulf, he has shipped intelligence and workflow platforms in complex, cross-border environments where compliance and precision were non-negotiable.
+          </p>
+          <p class="founder-bio">
+            He now serves as Senior AI Advisor to the Government of Mauritius, leading national AI strategy and digital governance at a policy level. AWI's intelligence platform, currently in development, brings that delivery into a structured, technology-enabled system that gives clients real-time visibility and control across every market they enter.
+          </p>
+          <div class="founder-creds">
+            <span class="cred">MBA, Macquarie University</span>
+            <span class="cred">AWS AI/ML Certified</span>
+            <span class="cred">Certified Scrum Master</span>
+            <span class="cred">Certified Product Owner</span>
+            <span class="cred">ITIL Foundation</span>
+            <span class="cred">SAFe Practitioner</span>
+          </div>
+          <a href="https://www.linkedin.com/in/rubenramdhony/" target="_blank" rel="noopener" class="founder-linkedin">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn Profile
+          </a>
+        </div>
+
+        <div class="founder reveal reveal-delay-1">
+          <div class="founder-role">On-the-Ground Practitioners</div>
+          <div class="founder-photo-wrap">
+            <div class="network-icon">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="17" stroke="#C8882A" stroke-width="1.2" fill="rgba(200,136,42,0.08)"/>
+                <circle cx="18" cy="10" r="2" fill="#C8882A"/>
+                <circle cx="26" cy="15" r="2" fill="#C8882A"/>
+                <circle cx="24" cy="24" r="2" fill="#C8882A"/>
+                <circle cx="14" cy="26" r="2" fill="#C8882A"/>
+                <circle cx="10" cy="17" r="2" fill="#C8882A"/>
+                <line x1="18" y1="10" x2="26" y2="15" stroke="#C8882A" stroke-width="0.8" opacity="0.6"/>
+                <line x1="26" y1="15" x2="24" y2="24" stroke="#C8882A" stroke-width="0.8" opacity="0.6"/>
+                <line x1="24" y1="24" x2="14" y2="26" stroke="#C8882A" stroke-width="0.8" opacity="0.6"/>
+                <line x1="14" y1="26" x2="10" y2="17" stroke="#C8882A" stroke-width="0.8" opacity="0.6"/>
+                <line x1="10" y1="17" x2="18" y2="10" stroke="#C8882A" stroke-width="0.8" opacity="0.6"/>
+                <line x1="18" y1="10" x2="24" y2="24" stroke="#C8882A" stroke-width="0.6" opacity="0.35"/>
+                <line x1="26" y1="15" x2="14" y2="26" stroke="#C8882A" stroke-width="0.6" opacity="0.35"/>
+              </svg>
+            </div>
+            <div class="founder-photo-meta">
+              <h3>The Africa<br />Network</h3>
+              <div class="founder-title">20+ Markets &middot; Active Relationships</div>
+            </div>
+          </div>
+          <p class="founder-bio">
+            Every AWI engagement is backed by a vetted network of in-country specialists across more than 20 African markets. Employment lawyers, chartered accountants, compliance advisors, HR operators and workforce specialists who know their markets from the inside: the regulatory detail, the practical friction, and the fastest path through it.
+          </p>
+          <p class="founder-bio">
+            This is not a referral list. These are working relationships, built over years of operating across the continent. They are what make AWI recommendations executable and AWI delivery real.
+          </p>
+          <div class="founder-creds">
+            <span class="cred">Employment Law</span>
+            <span class="cred">Tax &amp; Compliance</span>
+            <span class="cred">HR Operations</span>
+            <span class="cred">Market Entry</span>
+            <span class="cred">Workforce Structuring</span>
+          </div>
+        </div>
+
+        <div class="founder-together reveal">
+          <p>
+            AWI is built at the intersection of on-the-ground Africa operational expertise and structured technology delivery. The intelligence and the execution, working together. That combination is what turns expansion strategy into something your organisation can actually act on.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ───────────────────────────────────────────── -->
+  <section id="contact">
+    <div class="container contact-inner">
+      <div class="eyebrow reveal" style="text-align:center;">Get in touch</div>
+      <h2 class="display reveal reveal-delay-1" style="text-align:center; max-width:640px; margin-inline:auto;">
+        Start your Africa<br /><em class="italic">expansion journey</em>
+      </h2>
+      <p class="reveal reveal-delay-2" style="text-align:center; margin-top:1.2rem; color:var(--cream-dim); max-width:480px; margin-inline:auto;">
+        Tell us about your expansion goals. We will come back to you within one business day to schedule a consultation.
+      </p>
+      <form
+        class="contact-form reveal reveal-delay-3"
+        id="contactForm"
+        action="https://api.web3forms.com/submit"
+        method="POST"
+      >
+        <input type="hidden" name="access_key" value="c82a3752-2f2b-42b2-9f97-5b150e00e8c9">
+        <input type="hidden" name="subject" value="New AWI Consultation Request">
+        <input type="hidden" name="from_name" value="AWI Partners Website">
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+        <div class="form-row">
+          <input type="text" name="name" aria-label="Your name" placeholder="Your name" required />
+          <input type="text" name="company" aria-label="Company" placeholder="Company" required />
+        </div>
+        <input type="email" name="email" aria-label="Email address" placeholder="Email address" required />
+        <select name="countries_of_interest" aria-label="Countries of interest" required>
+          <option value="" disabled selected>Countries of interest</option>
+          <option value="Kenya">Kenya</option>
+          <option value="Tanzania">Tanzania</option>
+          <option value="Nigeria">Nigeria</option>
+          <option value="Ghana">Ghana</option>
+          <option value="South Africa">South Africa</option>
+          <option value="Rwanda">Rwanda</option>
+          <option value="Ethiopia">Ethiopia</option>
+          <option value="Multiple countries">Multiple countries</option>
+          <option value="Not yet decided">Not yet decided</option>
+        </select>
+        <textarea name="message" aria-label="Expansion goals" placeholder="Tell us briefly about your expansion goals"></textarea>
+        <button type="submit" class="btn btn--solid btn--lg" id="awi-submit-btn" style="width:100%;">Book a Consultation</button>
+      </form>
+      <div id="awi-form-success" style="display:none; text-align:center; padding:2rem 0;">
+        <p style="font-size:1.1rem; color:var(--amber);">Thank you. We will be in touch within one business day.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ────────────────────────────────────────────── -->
+  <footer>
+    <div class="container footer-partners">
+      <span class="footer-partners-label">Our Partners</span>
+      <a href="https://aegis-ai.solutions" target="_blank" rel="noopener" class="footer-partner-link" aria-label="Aegis AI Solutions">
+        <img src="aegis-logo.png" alt="Aegis AI Solutions" class="footer-partner-logo" />
+        <span class="footer-partner-desc">AI Governance &amp; Digital Assurance</span>
+      </a>
+      <a href="https://www.lifeintelligencegroup.com/" target="_blank" rel="noopener" class="footer-partner-link footer-partner-link--light" aria-label="Life Intelligence Group">
+        <img src="LIG-logo.png" alt="Life Intelligence Group" class="footer-partner-logo footer-partner-logo--light" />
+        <span class="footer-partner-desc">Life Intelligence Group</span>
+      </a>
+      <a href="https://evologics.ai/" target="_blank" rel="noopener" class="footer-partner-link footer-partner-link--light" aria-label="EvoLogics">
+        <img src="evologics-logo.png" alt="EvoLogics" class="footer-partner-logo footer-partner-logo--light footer-partner-logo--portrait" />
+        <span class="footer-partner-desc">EvoLogics</span>
+      </a>
+    </div>
+    <div class="container footer-inner">
+      <div class="footer-brand"><img src="logo.png" alt="AWI Partners" style="height:36px;width:auto;" /></div>
+      <p class="footer-copy">© 2026 AWI Partners, Africa Workforce Intelligence. Mauritius &amp; Global.</p>
+      <div class="footer-links">
+        <a href="#what-we-do">What We Do</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── SCRIPTS ───────────────────────────────────────────── -->
+  <script>
+    /* NAV scroll */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    /* Hamburger / mobile menu */
+    const ham = document.getElementById('hamburger');
+    const mob = document.getElementById('mobileMenu');
+    ham.addEventListener('click', () => {
+      const isOpen = mob.classList.toggle('open');
+      ham.setAttribute('aria-expanded', String(isOpen));
+    });
+    document.querySelectorAll('.mobile-link').forEach(l => {
+      l.addEventListener('click', () => {
+        mob.classList.remove('open');
+        ham.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    /* Scroll reveal */
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    /* Web3Forms */
+    const awiForm = document.getElementById('contactForm');
+    if (awiForm) {
+      awiForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('awi-submit-btn');
+        const orig = btn.textContent;
+        btn.textContent = 'Sending...';
+        btn.disabled = true;
+        try {
+          const res = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST', body: new FormData(awiForm)
+          });
+          const json = await res.json();
+          if (json.success) {
+            awiForm.style.display = 'none';
+            document.getElementById('awi-form-success').style.display = 'block';
+          } else {
+            btn.textContent = orig; btn.disabled = false;
+            alert('Something went wrong. Please email us directly.');
+          }
+        } catch(err) {
+          btn.textContent = orig; btn.disabled = false;
+          alert('Something went wrong. Please email us directly.');
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
