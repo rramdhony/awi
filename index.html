@@ -14,14 +14,15 @@
   <style>
     /* ── TOKENS ─────────────────────────────────────────── */
     :root {
-      --ink:       #0E0D0A;
-      --ink-soft:  #1A1916;
-      --cream:     #F3EDE2;
-      --cream-dim: #DDD6C8;
-      --amber:     #C8882A;
-      --amber-lt:  #E0A84A;
-      --dust:      #7A6E60;
-      --rule:      rgba(200,136,42,.25);
+      --ink:          #0E0D0A;
+      --ink-soft:     #1A1916;
+      --cream:        #F3EDE2;
+      --cream-dim:    #DDD6C8;
+      --amber:        #C8882A;
+      --amber-lt:     #E0A84A;
+      --dust:         #8A7E70; /* lightened from #7A6E60 to pass 4.5:1 on dark bg */
+      --rule:         rgba(200,136,42,.25);
+      --input-border: rgba(200,136,42,.65); /* passes 3:1 UI component requirement */
       --font-disp: 'Cormorant Garamond', Georgia, serif;
       --font-body: 'DM Sans', system-ui, sans-serif;
     }
@@ -40,6 +41,34 @@
     img { display: block; max-width: 100%; }
     a { color: inherit; text-decoration: none; }
     ul { list-style: none; }
+
+    /* ── SKIP LINK ───────────────────────────────────────── */
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 1rem;
+      z-index: 9999;
+      background: var(--amber);
+      color: var(--ink);
+      padding: .5rem 1.2rem;
+      font-size: .85rem;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .skip-link:focus { left: 1rem; }
+
+    /* ── SCREEN-READER ONLY ──────────────────────────────── */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
 
     /* ── UTILITY ─────────────────────────────────────────── */
     .amber { color: var(--amber); }
@@ -88,6 +117,7 @@
     nav.scrolled {
       background: rgba(14,13,10,.92);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       box-shadow: 0 1px 0 var(--rule);
     }
     .nav-inner {
@@ -162,9 +192,13 @@
     .hamburger {
       display: none;
       flex-direction: column;
+      justify-content: center;
+      align-items: center;
       gap: 5px;
       cursor: pointer;
-      padding: 4px;
+      padding: 10px;
+      min-width: 44px;
+      min-height: 44px;
       background: transparent;
       border: 0;
     }
@@ -222,8 +256,6 @@
       object-fit: cover;
       object-position: center center;
       opacity: 0.55;
-      /* shift the frame left so Mauritius hub sits toward the right
-         of the viewport rather than dead-centre */
       transform: scale(1.08) translateX(-4%);
     }
 
@@ -236,7 +268,7 @@
         linear-gradient(to bottom, rgba(14,13,10,.3) 0%, transparent 30%, rgba(14,13,10,.6) 100%);
     }
 
-    /* subtle grid/map texture -- sits above video, below text */
+    /* subtle grid/map texture */
     .hero-bg::before {
       content: '';
       position: absolute;
@@ -707,24 +739,47 @@
     .contact-form textarea {
       width: 100%;
       background: transparent;
-      border: 1px solid var(--rule);
+      border: 1px solid var(--input-border);
       color: var(--cream);
       font-family: var(--font-body);
       font-size: .9rem;
       font-weight: 300;
       padding: 1rem 1.2rem;
-      outline: none;
-      transition: border-color .2s;
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+      transition: border-color .2s, outline-color .2s;
       -webkit-appearance: none;
     }
     .contact-form input::placeholder,
     .contact-form textarea::placeholder { color: var(--dust); }
     .contact-form input:focus,
     .contact-form select:focus,
-    .contact-form textarea:focus { border-color: var(--amber); }
+    .contact-form textarea:focus {
+      border-color: var(--amber);
+      outline-color: var(--amber);
+    }
     .contact-form select option { background: var(--ink); }
     .contact-form textarea { resize: vertical; min-height: 110px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-hint {
+      font-size: .75rem;
+      color: var(--dust);
+      text-align: left;
+      margin-bottom: -.2rem;
+    }
+    .form-error {
+      display: none;
+      font-size: .78rem;
+      color: #E07878;
+      text-align: left;
+      margin-top: .3rem;
+    }
+    .form-error.visible { display: block; }
+    .contact-form input[aria-invalid="true"],
+    .contact-form select[aria-invalid="true"],
+    .contact-form textarea[aria-invalid="true"] {
+      border-color: #E07878;
+    }
 
     /* ── FOOTER ──────────────────────────────────────────── */
     footer {
@@ -798,6 +853,7 @@
     .footer-links a {
       font-size: .78rem;
       color: var(--dust);
+      padding: .6rem .2rem;
       transition: color .2s;
     }
     .footer-links a:hover { color: var(--cream); }
@@ -809,10 +865,6 @@
     }
     .footer-credit a { color: var(--dust); transition: color .2s; }
     .footer-credit a:hover { color: var(--cream); }
-
-    @media (prefers-reduced-motion: reduce) {
-      .hero-video { display: none; }
-    }
 
     /* ── ANIMATIONS ──────────────────────────────────────── */
     @keyframes fadeUp {
@@ -843,6 +895,19 @@
     .reveal-delay-3 { transition-delay: .3s; }
     .reveal-delay-4 { transition-delay: .4s; }
     .reveal-delay-5 { transition-delay: .5s; }
+
+    /* ── REDUCED MOTION ──────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-video { display: none; }
+      .hero-scroll .line { animation: none; }
+      .hero-logo,
+      .hero-tag,
+      .hero-headline,
+      .hero-sub,
+      .hero-ctas,
+      .hero-scroll { animation: none; opacity: 1; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
 
     /* ── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 900px) {
@@ -908,8 +973,10 @@
 
 <body>
 
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <!-- ── NAV ─────────────────────────────────────────────── -->
-  <nav id="navbar">
+  <nav id="navbar" aria-label="Main navigation">
     <div class="nav-inner">
       <a href="#hero" class="nav-brand">
         <img src="logo.png" alt="AWI Partners, Africa Workforce Intelligence" class="nav-logo" />
@@ -928,13 +995,15 @@
   </nav>
 
   <!-- Mobile menu -->
-  <div class="mobile-menu" id="mobileMenu">
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-label="Navigation menu">
     <a href="#what-we-do" class="mobile-link">What We Do</a>
     <a href="#how-it-works" class="mobile-link">How It Works</a>
     <a href="#use-cases" class="mobile-link">Use Cases</a>
     <a href="#about" class="mobile-link">About</a>
     <a href="#contact" class="btn btn--solid mobile-link">Book a Consultation</a>
   </div>
+
+  <main id="main-content">
 
   <!-- ── HERO ─────────────────────────────────────────────── -->
   <section id="hero">
@@ -1249,7 +1318,7 @@
             <span class="cred">SAFe Practitioner</span>
           </div>
           <a href="https://www.linkedin.com/in/rubenramdhony/" target="_blank" rel="noopener" class="founder-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             LinkedIn Profile
           </a>
         </div>
@@ -1258,7 +1327,7 @@
           <div class="founder-role">On-the-Ground Practitioners</div>
           <div class="founder-photo-wrap">
             <div class="network-icon">
-              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg aria-hidden="true" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="18" cy="18" r="17" stroke="#C8882A" stroke-width="1.2" fill="rgba(200,136,42,0.08)"/>
                 <circle cx="18" cy="10" r="2" fill="#C8882A"/>
                 <circle cx="26" cy="15" r="2" fill="#C8882A"/>
@@ -1319,36 +1388,107 @@
         id="contactForm"
         action="https://api.web3forms.com/submit"
         method="POST"
+        novalidate
       >
         <input type="hidden" name="access_key" value="c82a3752-2f2b-42b2-9f97-5b150e00e8c9">
         <input type="hidden" name="subject" value="New AWI Consultation Request">
         <input type="hidden" name="from_name" value="AWI Partners Website">
         <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+        <p class="form-hint">Fields marked * are required</p>
+
         <div class="form-row">
-          <input type="text" name="name" aria-label="Your name" placeholder="Your name" required />
-          <input type="text" name="company" aria-label="Company" placeholder="Company" required />
+          <div>
+            <label class="sr-only" for="field-name">Your name *</label>
+            <input
+              type="text"
+              id="field-name"
+              name="name"
+              placeholder="Your name *"
+              required
+              autocomplete="name"
+              aria-required="true"
+              aria-describedby="err-name"
+              aria-invalid="false"
+            />
+            <span class="form-error" id="err-name" role="alert">Please enter your name</span>
+          </div>
+          <div>
+            <label class="sr-only" for="field-company">Company *</label>
+            <input
+              type="text"
+              id="field-company"
+              name="company"
+              placeholder="Company *"
+              required
+              autocomplete="organization"
+              aria-required="true"
+              aria-describedby="err-company"
+              aria-invalid="false"
+            />
+            <span class="form-error" id="err-company" role="alert">Please enter your company name</span>
+          </div>
         </div>
-        <input type="email" name="email" aria-label="Email address" placeholder="Email address" required />
-        <select name="countries_of_interest" aria-label="Countries of interest" required>
-          <option value="" disabled selected>Countries of interest</option>
-          <option value="Kenya">Kenya</option>
-          <option value="Tanzania">Tanzania</option>
-          <option value="Nigeria">Nigeria</option>
-          <option value="Ghana">Ghana</option>
-          <option value="South Africa">South Africa</option>
-          <option value="Rwanda">Rwanda</option>
-          <option value="Ethiopia">Ethiopia</option>
-          <option value="Multiple countries">Multiple countries</option>
-          <option value="Not yet decided">Not yet decided</option>
-        </select>
-        <textarea name="message" aria-label="Expansion goals" placeholder="Tell us briefly about your expansion goals"></textarea>
+
+        <div>
+          <label class="sr-only" for="field-email">Email address *</label>
+          <input
+            type="email"
+            id="field-email"
+            name="email"
+            placeholder="Email address *"
+            required
+            autocomplete="email"
+            aria-required="true"
+            aria-describedby="err-email"
+            aria-invalid="false"
+          />
+          <span class="form-error" id="err-email" role="alert">Please enter a valid email address</span>
+        </div>
+
+        <div>
+          <label class="sr-only" for="field-countries">Countries of interest *</label>
+          <select
+            id="field-countries"
+            name="countries_of_interest"
+            required
+            aria-required="true"
+            aria-describedby="err-countries"
+            aria-invalid="false"
+          >
+            <option value="" disabled selected>Countries of interest *</option>
+            <option value="Kenya">Kenya</option>
+            <option value="Tanzania">Tanzania</option>
+            <option value="Nigeria">Nigeria</option>
+            <option value="Ghana">Ghana</option>
+            <option value="South Africa">South Africa</option>
+            <option value="Rwanda">Rwanda</option>
+            <option value="Ethiopia">Ethiopia</option>
+            <option value="Multiple countries">Multiple countries</option>
+            <option value="Not yet decided">Not yet decided</option>
+          </select>
+          <span class="form-error" id="err-countries" role="alert">Please select a country of interest</span>
+        </div>
+
+        <div>
+          <label class="sr-only" for="field-message">Message</label>
+          <textarea
+            id="field-message"
+            name="message"
+            placeholder="Tell us briefly about your expansion goals"
+            autocomplete="off"
+          ></textarea>
+        </div>
+
         <button type="submit" class="btn btn--solid btn--lg" id="awi-submit-btn" style="width:100%;">Book a Consultation</button>
       </form>
-      <div id="awi-form-success" style="display:none; text-align:center; padding:2rem 0;">
+      <div id="awi-form-success" style="display:none; text-align:center; padding:2rem 0;" role="alert" aria-live="polite">
         <p style="font-size:1.1rem; color:var(--amber);">Thank you. We will be in touch within one business day.</p>
       </div>
     </div>
   </section>
+
+  </main>
 
   <!-- ── FOOTER ────────────────────────────────────────────── -->
   <footer>
@@ -1370,11 +1510,11 @@
     <div class="container footer-inner">
       <div class="footer-brand"><img src="logo.png" alt="AWI Partners" style="height:36px;width:auto;" /></div>
       <p class="footer-copy">© 2026 AWI Partners, Africa Workforce Intelligence. Mauritius &amp; Global.</p>
-      <div class="footer-links">
+      <nav aria-label="Footer navigation" class="footer-links">
         <a href="#what-we-do">What We Do</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
-      </div>
+      </nav>
     </div>
     <div class="container footer-credit">
       Site by <a href="https://studio26.me" target="_blank" rel="noopener">studio26.me</a>
@@ -1402,6 +1542,13 @@
         ham.setAttribute('aria-expanded', 'false');
       });
     });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mob.classList.contains('open')) {
+        mob.classList.remove('open');
+        ham.setAttribute('aria-expanded', 'false');
+        ham.focus();
+      }
+    });
 
     /* Scroll reveal */
     const reveals = document.querySelectorAll('.reveal');
@@ -1415,19 +1562,49 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach(el => observer.observe(el));
 
-    /* Web3Forms */
+    /* Form validation + submission */
     const awiForm = document.getElementById('contactForm');
     if (awiForm) {
+      const fields = [
+        { id: 'field-name',      errId: 'err-name',      type: 'text' },
+        { id: 'field-company',   errId: 'err-company',   type: 'text' },
+        { id: 'field-email',     errId: 'err-email',     type: 'email' },
+        { id: 'field-countries', errId: 'err-countries', type: 'select' },
+      ];
+
+      function validateField({ id, errId, type }) {
+        const el  = document.getElementById(id);
+        const err = document.getElementById(errId);
+        let valid = true;
+        if (type === 'select')     valid = el.value !== '';
+        else if (type === 'email') valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+        else                       valid = el.value.trim() !== '';
+        el.setAttribute('aria-invalid', String(!valid));
+        err.classList.toggle('visible', !valid);
+        return valid;
+      }
+
+      fields.forEach(f => {
+        const el = document.getElementById(f.id);
+        el.addEventListener('input',  () => validateField(f));
+        el.addEventListener('change', () => validateField(f));
+      });
+
       awiForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const btn = document.getElementById('awi-submit-btn');
+        let firstInvalid = null;
+        let allValid = true;
+        fields.forEach(f => {
+          if (!validateField(f)) { allValid = false; if (!firstInvalid) firstInvalid = f.id; }
+        });
+        if (!allValid) { document.getElementById(firstInvalid).focus(); return; }
+
+        const btn  = document.getElementById('awi-submit-btn');
         const orig = btn.textContent;
-        btn.textContent = 'Sending...';
+        btn.textContent = 'Sending…';
         btn.disabled = true;
         try {
-          const res = await fetch('https://api.web3forms.com/submit', {
-            method: 'POST', body: new FormData(awiForm)
-          });
+          const res  = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: new FormData(awiForm) });
           const json = await res.json();
           if (json.success) {
             awiForm.style.display = 'none';
@@ -1436,7 +1613,7 @@
             btn.textContent = orig; btn.disabled = false;
             alert('Something went wrong. Please email us directly.');
           }
-        } catch(err) {
+        } catch {
           btn.textContent = orig; btn.disabled = false;
           alert('Something went wrong. Please email us directly.');
         }
