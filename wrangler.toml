@@ -1,0 +1,5 @@
+name = "awi-partners"
+compatibility_date = "2025-05-28"
+
+[assets]
+directory = "."
