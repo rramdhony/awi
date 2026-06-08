@@ -247,27 +247,6 @@
       overflow: hidden;
     }
 
-    /* ── video background ── */
-    .hero-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-      opacity: 0.55;
-      transform: scale(1.08) translateX(-4%);
-    }
-
-    /* dark scrim so headline text stays legible */
-    .hero-scrim {
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(to right, rgba(14,13,10,.82) 0%, rgba(14,13,10,.45) 55%, rgba(14,13,10,.25) 100%),
-        linear-gradient(to bottom, rgba(14,13,10,.3) 0%, transparent 30%, rgba(14,13,10,.6) 100%);
-    }
-
     /* subtle grid/map texture */
     .hero-bg::before {
       content: '';
@@ -299,6 +278,99 @@
       max-width: 1200px;
       margin-inline: auto;
       padding: 80px 0;
+      display: grid;
+      grid-template-columns: 1fr 0.85fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    /* ── HERO MAP ────────────────────────────────────────── */
+    .hero-map-col {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeIn .9s .5s forwards;
+    }
+    .awi-map-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+    }
+    .awi-map-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 48px rgba(200,136,42,.18));
+    }
+    .awi-country {
+      fill: rgba(200,136,42,.05);
+      stroke: rgba(200,136,42,.18);
+      stroke-width: 0.4;
+      transition: fill .18s, stroke .18s;
+    }
+    .awi-country--market {
+      fill: rgba(200,136,42,.12);
+      stroke: rgba(200,136,42,.38);
+      stroke-width: 0.5;
+      cursor: pointer;
+    }
+    .awi-country--hovered {
+      fill: rgba(200,136,42,.30) !important;
+      stroke: rgba(200,136,42,.75) !important;
+      stroke-width: 0.65 !important;
+    }
+    .awi-connection {
+      fill: none;
+      stroke: rgba(200,136,42,.35);
+      stroke-width: 0.55;
+      stroke-dasharray: 3 2.5;
+      animation: awiLineFlow 2.5s linear infinite;
+    }
+    .awi-dot-ring {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: awiDotRing 2.5s ease-out infinite;
+    }
+    .awi-dot-core {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: awiDotPulse 2.5s ease-in-out infinite;
+    }
+    .awi-hub-glow {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: awiHubGlow 3s ease-in-out infinite;
+    }
+    .awi-tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(14,13,10,.88);
+      border: 1px solid rgba(200,136,42,.42);
+      border-radius: 6px;
+      padding: 7px 12px;
+      display: none;
+      flex-direction: column;
+      gap: 3px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      white-space: nowrap;
+      z-index: 10;
+    }
+    .awi-tooltip-name {
+      font-family: var(--font-body);
+      font-size: .78rem;
+      font-weight: 500;
+      color: var(--cream);
+    }
+    .awi-tooltip-badge {
+      font-family: var(--font-body);
+      font-size: .62rem;
+      font-weight: 500;
+      color: var(--amber);
+      letter-spacing: .07em;
+      text-transform: uppercase;
     }
     .hero-tag {
       display: inline-flex;
@@ -879,6 +951,22 @@
       0%, 100% { transform: scaleY(1); opacity: 1; }
       50%       { transform: scaleY(.4); opacity: .4; }
     }
+    @keyframes awiLineFlow {
+      from { stroke-dashoffset: 0; }
+      to   { stroke-dashoffset: -22; }
+    }
+    @keyframes awiDotRing {
+      0%   { transform: scale(1);   opacity: .65; }
+      100% { transform: scale(3.2); opacity: 0;   }
+    }
+    @keyframes awiDotPulse {
+      0%, 100% { opacity: .95; }
+      50%       { opacity: .5;  }
+    }
+    @keyframes awiHubGlow {
+      0%, 100% { transform: scale(1);    opacity: .35; }
+      50%       { transform: scale(1.4);  opacity: .7;  }
+    }
 
     /* scroll-reveal */
     .reveal {
@@ -898,20 +986,26 @@
 
     /* ── REDUCED MOTION ──────────────────────────────────── */
     @media (prefers-reduced-motion: reduce) {
-      .hero-video { display: none; }
       .hero-scroll .line { animation: none; }
       .hero-logo,
       .hero-tag,
       .hero-headline,
       .hero-sub,
       .hero-ctas,
-      .hero-scroll { animation: none; opacity: 1; }
+      .hero-scroll,
+      .hero-map-col { animation: none; opacity: 1; }
       .reveal { opacity: 1; transform: none; transition: none; }
+      .awi-connection,
+      .awi-dot-ring,
+      .awi-dot-core,
+      .awi-hub-glow { animation: none; }
     }
 
     /* ── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 900px) {
       .section { padding: 80px 0; }
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-map-col { display: none; }
       .services-layout { grid-template-columns: 1fr; gap: 3rem; }
       .services-sticky { position: static; }
       .steps { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
@@ -1007,33 +1101,34 @@
 
   <!-- ── HERO ─────────────────────────────────────────────── -->
   <section id="hero">
-    <div class="hero-bg">
-      <video
-        class="hero-video"
-        src="https://pub-31c616ea8a044758ade2bd1dff1dfbd9.r2.dev/africa-network.mp4"
-        autoplay
-        loop
-        muted
-        playsinline
-        preload="auto"
-        aria-hidden="true"
-      ></video>
-      <div class="hero-scrim"></div>
-    </div>
+    <div class="hero-bg"></div>
 
     <div class="hero-inner">
-      <div class="hero-tag">AWI Partners, Africa Expansion, Structured &amp; Intelligent</div>
-      <img src="logo.png" alt="AWI Partners" class="hero-logo" />
-      <h1 class="hero-headline">
-        A smarter way to<br />
-        <em>expand into Africa</em>
-      </h1>
-      <p class="hero-sub">
-        We combine deep workforce expertise with structured systems and AI-enabled delivery to help companies enter, operate and scale across Africa, with clarity, speed and control.
-      </p>
-      <div class="hero-ctas">
-        <a href="#contact" class="btn btn--solid btn--lg">Book a Consultation</a>
-        <a href="#what-we-do" class="btn btn--lg">What We Do</a>
+      <!-- LEFT: text content -->
+      <div class="hero-content">
+        <div class="hero-tag">AWI Partners, Africa Expansion, Structured &amp; Intelligent</div>
+        <img src="logo.png" alt="AWI Partners" class="hero-logo" />
+        <h1 class="hero-headline">
+          A smarter way to<br />
+          <em>expand into Africa</em>
+        </h1>
+        <p class="hero-sub">
+          We combine deep workforce expertise with structured systems and AI-enabled delivery to help companies enter, operate and scale across Africa, with clarity, speed and control.
+        </p>
+        <div class="hero-ctas">
+          <a href="#contact" class="btn btn--solid btn--lg">Book a Consultation</a>
+          <a href="#what-we-do" class="btn btn--lg">What We Do</a>
+        </div>
+      </div>
+
+      <!-- RIGHT: interactive Africa map -->
+      <div class="hero-map-col" aria-hidden="true">
+        <div class="awi-map-wrap" id="awiMapWrap">
+          <div class="awi-tooltip" id="awiTooltip">
+            <span class="awi-tooltip-name" id="awiTooltipName"></span>
+            <span class="awi-tooltip-badge">Active market</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1561,6 +1656,180 @@
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach(el => observer.observe(el));
+
+    /* ── Africa Hero Map ────────────────────────────────── */
+    (function initAwiMap() {
+      const NS = 'http://www.w3.org/2000/svg';
+
+      const AWI_MARKETS = {
+        KE: 'Kenya',
+        TZ: 'Tanzania',
+        NG: 'Nigeria',
+        GH: 'Ghana',
+        ZA: 'South Africa',
+        RW: 'Rwanda',
+        ET: 'Ethiopia',
+      };
+
+      /* SVG-space centroids sourced from the africa.svg viewBox */
+      const MARKET_DOTS = [
+        { id: 'KE', cx: 177.5, cy: 110.8 },
+        { id: 'NG', cx:  93.5, cy:  85.4 },
+        { id: 'ZA', cx: 141.3, cy: 199.7 },
+        { id: 'GH', cx:  68.4, cy:  88.3 },
+        { id: 'ET', cx: 183.5, cy:  85.4 },
+        { id: 'TZ', cx: 168.9, cy: 131.5 },
+        { id: 'RW', cx: 155.2, cy: 118.2 },
+      ];
+
+      /* Mauritius hub — AWI HQ */
+      var MU = { cx: 232.6, cy: 173.1 };
+
+      var wrap        = document.getElementById('awiMapWrap');
+      var tooltipEl   = document.getElementById('awiTooltip');
+      var tooltipName = document.getElementById('awiTooltipName');
+      if (!wrap) return;
+
+      /* Build SVG scaffold */
+      var svg = document.createElementNS(NS, 'svg');
+      svg.setAttribute('viewBox', '0 0 239.06 217.32');
+      svg.setAttribute('class', 'awi-map-svg');
+      svg.setAttribute('aria-hidden', 'true');
+
+      var pathGroup    = document.createElementNS(NS, 'g');
+      var lineGroup    = document.createElementNS(NS, 'g');
+      var overlayGroup = document.createElementNS(NS, 'g');
+      svg.appendChild(pathGroup);
+      svg.appendChild(lineGroup);
+      svg.appendChild(overlayGroup);
+      wrap.appendChild(svg);
+
+      svg.addEventListener('mouseleave', function() {
+        tooltipEl.style.display = 'none';
+        wrap.querySelectorAll('.awi-country--hovered').forEach(function(el) {
+          el.classList.remove('awi-country--hovered');
+        });
+      });
+
+      function positionTooltip(e) {
+        var rect = wrap.getBoundingClientRect();
+        tooltipEl.style.left = (e.clientX - rect.left + 14) + 'px';
+        tooltipEl.style.top  = (e.clientY - rect.top  - 10) + 'px';
+      }
+
+      /* Fetch + render country paths */
+      fetch('africa.svg')
+        .then(function(r) { return r.text(); })
+        .then(function(text) {
+          var doc   = new DOMParser().parseFromString(text, 'image/svg+xml');
+          var paths = doc.querySelectorAll('path[id]');
+
+          paths.forEach(function(p) {
+            var isMarket = AWI_MARKETS.hasOwnProperty(p.id);
+            var path = document.createElementNS(NS, 'path');
+            path.setAttribute('d', p.getAttribute('d') || '');
+            path.setAttribute('class', 'awi-country' + (isMarket ? ' awi-country--market' : ''));
+
+            if (isMarket) {
+              var countryName = AWI_MARKETS[p.id];
+              path.addEventListener('mouseenter', function(e) {
+                path.classList.add('awi-country--hovered');
+                tooltipName.textContent = countryName;
+                tooltipEl.style.display = 'flex';
+                positionTooltip(e);
+              });
+              path.addEventListener('mousemove', positionTooltip);
+              path.addEventListener('mouseleave', function() {
+                path.classList.remove('awi-country--hovered');
+                tooltipEl.style.display = 'none';
+              });
+            }
+            pathGroup.appendChild(path);
+          });
+
+          /* Animated connection lines: MU → each active market */
+          MARKET_DOTS.forEach(function(m, i) {
+            var line = document.createElementNS(NS, 'line');
+            line.setAttribute('x1', MU.cx);
+            line.setAttribute('y1', MU.cy);
+            line.setAttribute('x2', m.cx);
+            line.setAttribute('y2', m.cy);
+            line.setAttribute('class', 'awi-connection');
+            line.style.animationDelay = (i * 0.28) + 's';
+            lineGroup.appendChild(line);
+          });
+
+          /* Market dots: outer pulse ring + inner core */
+          MARKET_DOTS.forEach(function(m, i) {
+            var ring = document.createElementNS(NS, 'circle');
+            ring.setAttribute('cx', m.cx);
+            ring.setAttribute('cy', m.cy);
+            ring.setAttribute('r', '3.5');
+            ring.setAttribute('fill', 'none');
+            ring.setAttribute('stroke', 'rgba(200,136,42,0.55)');
+            ring.setAttribute('stroke-width', '0.6');
+            ring.setAttribute('class', 'awi-dot-ring');
+            ring.style.animationDelay = (i * 0.3) + 's';
+            overlayGroup.appendChild(ring);
+
+            var dot = document.createElementNS(NS, 'circle');
+            dot.setAttribute('cx', m.cx);
+            dot.setAttribute('cy', m.cy);
+            dot.setAttribute('r', '2');
+            dot.setAttribute('fill', '#C8882A');
+            dot.setAttribute('class', 'awi-dot-core');
+            dot.style.animationDelay = (i * 0.3) + 's';
+            overlayGroup.appendChild(dot);
+          });
+
+          /* Mauritius hub: outer glow ring + mid ring + core dot + label */
+          var hubGlow = document.createElementNS(NS, 'circle');
+          hubGlow.setAttribute('cx', MU.cx);
+          hubGlow.setAttribute('cy', MU.cy);
+          hubGlow.setAttribute('r', '11');
+          hubGlow.setAttribute('fill', 'rgba(200,136,42,0.06)');
+          hubGlow.setAttribute('stroke', 'rgba(200,136,42,0.22)');
+          hubGlow.setAttribute('stroke-width', '0.5');
+          hubGlow.setAttribute('class', 'awi-hub-glow');
+          overlayGroup.appendChild(hubGlow);
+
+          var hubMid = document.createElementNS(NS, 'circle');
+          hubMid.setAttribute('cx', MU.cx);
+          hubMid.setAttribute('cy', MU.cy);
+          hubMid.setAttribute('r', '5.5');
+          hubMid.setAttribute('fill', 'rgba(200,136,42,0.14)');
+          hubMid.setAttribute('stroke', 'rgba(200,136,42,0.48)');
+          hubMid.setAttribute('stroke-width', '0.5');
+          overlayGroup.appendChild(hubMid);
+
+          var hubCore = document.createElementNS(NS, 'circle');
+          hubCore.setAttribute('cx', MU.cx);
+          hubCore.setAttribute('cy', MU.cy);
+          hubCore.setAttribute('r', '2.8');
+          hubCore.setAttribute('fill', '#C8882A');
+          overlayGroup.appendChild(hubCore);
+
+          var hubLabel = document.createElementNS(NS, 'text');
+          hubLabel.setAttribute('x', MU.cx + 4.5);
+          hubLabel.setAttribute('y', MU.cy + 1.5);
+          hubLabel.setAttribute('fill', 'rgba(200,136,42,0.9)');
+          hubLabel.setAttribute('font-size', '5.5');
+          hubLabel.setAttribute('font-weight', '700');
+          hubLabel.setAttribute('font-family', 'DM Sans, system-ui, sans-serif');
+          hubLabel.textContent = 'MU';
+          overlayGroup.appendChild(hubLabel);
+        })
+        .catch(function() {
+          /* Fallback: render a static SVG image if fetch fails */
+          var img = document.createElementNS(NS, 'image');
+          img.setAttribute('href', 'africa.svg');
+          img.setAttribute('x', '0');
+          img.setAttribute('y', '0');
+          img.setAttribute('width', '239.06');
+          img.setAttribute('height', '217.32');
+          svg.appendChild(img);
+        });
+    })();
 
     /* Form validation + submission */
     const awiForm = document.getElementById('contactForm');
