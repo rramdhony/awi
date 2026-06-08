@@ -101,6 +101,9 @@
     }
     .rule-top { border-top: 1px solid var(--rule); padding-top: 2rem; }
 
+    /* section anchors clear the fixed nav */
+    [id] { scroll-margin-top: 80px; }
+
     /* grid strips */
     .bg-strip {
       background: var(--ink-soft);
@@ -176,6 +179,7 @@
     .btn:hover {
       background: var(--amber);
       color: var(--ink);
+      transform: translateY(-1px);
     }
     .btn--solid {
       background: var(--amber);
@@ -403,7 +407,13 @@
     }
     .hero-headline em {
       font-style: italic;
-      color: var(--amber);
+      color: var(--amber); /* fallback */
+      background: linear-gradient(100deg, #C8882A 0%, #E8B86D 50%, #C8882A 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradientShift 4s linear infinite;
     }
     .hero-sub {
       max-width: 560px;
@@ -444,6 +454,123 @@
       height: 40px;
       background: linear-gradient(to bottom, var(--amber), transparent);
       animation: scrollLine 2s 1.6s ease-in-out infinite;
+    }
+
+    /* ── STATS STRIP ─────────────────────────────────────── */
+    .stats-strip {
+      background: linear-gradient(135deg, rgba(200,136,42,.05) 0%, rgba(200,136,42,.02) 50%, rgba(200,136,42,.05) 100%), var(--ink-soft);
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: 3rem 0;
+    }
+    .stats-inner {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      text-align: center;
+    }
+    .stat {
+      padding: 1rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5rem;
+    }
+    .stat + .stat { border-left: 1px solid var(--rule); }
+    .stat-num-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: .15rem;
+      line-height: 1;
+    }
+    .stat-num {
+      font-family: var(--font-disp);
+      font-size: clamp(2.6rem, 4vw, 3.8rem);
+      font-weight: 300;
+      color: var(--amber);
+      letter-spacing: -.02em;
+    }
+    .stat-suffix {
+      font-family: var(--font-disp);
+      font-size: clamp(1.4rem, 2vw, 2rem);
+      font-weight: 300;
+      color: var(--amber-lt);
+    }
+    .stat-label {
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--dust);
+    }
+
+    /* ── CREAM SECTION OVERRIDES ─────────────────────────── */
+    .section--cream {
+      background: var(--cream);
+      color: var(--ink);
+    }
+    .section--cream .eyebrow { color: var(--amber); }
+    .section--cream .display { color: var(--ink); }
+    .section--cream .display em { color: var(--amber); }
+    .section--cream .outcomes-grid { border-color: rgba(14,13,10,.1); }
+    .section--cream .outcome-item { border-color: rgba(14,13,10,.1); }
+    .section--cream .outcome-item:hover {
+      background: rgba(200,136,42,.06);
+      box-shadow: inset 0 3px 0 var(--amber);
+    }
+    .section--cream .outcome-num { color: var(--amber); }
+    .section--cream .outcome-text { color: rgba(14,13,10,.62); }
+    .section--cream .outcome-text strong { color: var(--ink); }
+
+    /* ── PARTNERS SECTION ────────────────────────────────── */
+    .partners-section {
+      background: var(--ink-soft);
+      padding: 3.2rem 0;
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+    }
+    .partners-section-label {
+      text-align: center;
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--dust);
+      margin-bottom: 2.4rem;
+    }
+    .partners-logos-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+    }
+    .partner-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: .65;
+      transition: opacity .25s;
+    }
+    .partner-link:hover { opacity: 1; }
+    .partner-logo {
+      height: 36px;
+      width: auto;
+      display: block;
+    }
+    .partner-logo--light {
+      height: 28px;
+      padding: 4px 10px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 4px;
+    }
+    .partner-logo--portrait {
+      height: 44px;
+      padding: 4px 8px;
+    }
+    .partner-desc {
+      font-size: .75rem;
+      color: var(--dust);
+      letter-spacing: .06em;
     }
 
     /* ── SECTION: OUTCOMES ───────────────────────────────── */
@@ -507,6 +634,23 @@
       gap: 1.2rem;
       align-items: start;
     }
+    .service-item {
+      position: relative;
+    }
+    .service-item::before {
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--amber);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform .25s ease;
+    }
+    .service-item:hover { background: rgba(200,136,42,.025); }
+    .service-item:hover::before { transform: scaleY(1); }
     .service-idx {
       font-family: var(--font-disp);
       font-size: .85rem;
@@ -602,7 +746,11 @@
       opacity: 0;
       transition: opacity .3s;
     }
-    .case:hover { background: var(--ink-soft); }
+    .case:hover {
+      background: var(--ink-soft);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(200,136,42,.09);
+    }
     .case:hover::before { opacity: 1; }
     .case-country {
       font-size: .68rem;
@@ -951,6 +1099,10 @@
       0%, 100% { transform: scaleY(1); opacity: 1; }
       50%       { transform: scaleY(.4); opacity: .4; }
     }
+    @keyframes gradientShift {
+      from { background-position: 0% center; }
+      to   { background-position: 200% center; }
+    }
     @keyframes awiLineFlow {
       from { stroke-dashoffset: 0; }
       to   { stroke-dashoffset: -22; }
@@ -994,11 +1146,19 @@
       .hero-ctas,
       .hero-scroll,
       .hero-map-col { animation: none; opacity: 1; }
+      .hero-headline em {
+        animation: none;
+        background: none;
+        -webkit-text-fill-color: var(--amber);
+        color: var(--amber);
+      }
       .reveal { opacity: 1; transform: none; transition: none; }
       .awi-connection,
       .awi-dot-ring,
       .awi-dot-core,
       .awi-hub-glow { animation: none; }
+      .case:hover { transform: none; }
+      .btn:hover { transform: none; }
     }
 
     /* ── RESPONSIVE ──────────────────────────────────────── */
@@ -1027,12 +1187,11 @@
       .nav-links { display: none; }
       .hamburger { display: flex; }
       .steps { grid-template-columns: 1fr; }
-      .footer-partners {
-        flex-wrap: wrap;
-        gap: 1rem;
-      }
-      .footer-partner-desc { display: none; }
-      .footer-partner-logo { height: 28px; }
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+      .stat:nth-child(3) { border-left: none; border-top: 1px solid var(--rule); }
+      .stat:nth-child(4) { border-top: 1px solid var(--rule); }
+      .partners-logos-row { gap: 2.4rem; }
+      .partner-desc { display: none; }
     }
     @media (max-width: 480px) {
       .hero-headline { font-size: 2.8rem; }
@@ -1138,8 +1297,40 @@
     </div>
   </section>
 
+  <!-- ── STATS STRIP ──────────────────────────────────────── -->
+  <div class="stats-strip" aria-label="Key figures">
+    <div class="container stats-inner">
+      <div class="stat">
+        <div class="stat-num-wrap">
+          <span class="stat-num" data-target="20">0</span>
+          <span class="stat-suffix">+</span>
+        </div>
+        <span class="stat-label">Active Markets</span>
+      </div>
+      <div class="stat">
+        <div class="stat-num-wrap">
+          <span class="stat-num" data-target="46">0</span>
+        </div>
+        <span class="stat-label">Countries in Network</span>
+      </div>
+      <div class="stat">
+        <div class="stat-num-wrap">
+          <span class="stat-num" data-target="5">0</span>
+        </div>
+        <span class="stat-label">Core Service Areas</span>
+      </div>
+      <div class="stat">
+        <div class="stat-num-wrap">
+          <span class="stat-num" data-target="1">0</span>
+          <span class="stat-suffix">-Day</span>
+        </div>
+        <span class="stat-label">Response Guarantee</span>
+      </div>
+    </div>
+  </div>
+
   <!-- ── OUTCOMES ─────────────────────────────────────────── -->
-  <section class="section" id="outcomes">
+  <section class="section section--cream" id="outcomes">
     <div class="container">
       <div class="eyebrow reveal">What you walk away with</div>
       <h2 class="display reveal reveal-delay-1" style="max-width:640px; margin-bottom:3.5rem;">
@@ -1468,6 +1659,27 @@
     </div>
   </section>
 
+  <!-- ── PARTNERS ─────────────────────────────────────────── -->
+  <section class="partners-section" aria-label="Our Partners">
+    <div class="container">
+      <p class="partners-section-label">In Partnership With</p>
+      <div class="partners-logos-row">
+        <a href="https://aegis-ai.solutions" target="_blank" rel="noopener" class="partner-link" aria-label="Aegis AI Solutions">
+          <img src="aegis-logo.png" alt="Aegis AI Solutions" class="partner-logo" />
+          <span class="partner-desc">AI Governance &amp; Digital Assurance</span>
+        </a>
+        <a href="https://www.lifeintelligencegroup.com/" target="_blank" rel="noopener" class="partner-link" aria-label="Life Intelligence Group">
+          <img src="LIG-logo.png" alt="Life Intelligence Group" class="partner-logo partner-logo--light" />
+          <span class="partner-desc">Life Intelligence Group</span>
+        </a>
+        <a href="https://evologics.ai/" target="_blank" rel="noopener" class="partner-link" aria-label="EvoLogics">
+          <img src="evologics-logo.png" alt="EvoLogics" class="partner-logo partner-logo--light partner-logo--portrait" />
+          <span class="partner-desc">EvoLogics</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ── CONTACT ───────────────────────────────────────────── -->
   <section id="contact">
     <div class="container contact-inner">
@@ -1587,21 +1799,6 @@
 
   <!-- ── FOOTER ────────────────────────────────────────────── -->
   <footer>
-    <div class="container footer-partners">
-      <span class="footer-partners-label">Our Partners</span>
-      <a href="https://aegis-ai.solutions" target="_blank" rel="noopener" class="footer-partner-link" aria-label="Aegis AI Solutions">
-        <img src="aegis-logo.png" alt="Aegis AI Solutions" class="footer-partner-logo" />
-        <span class="footer-partner-desc">AI Governance &amp; Digital Assurance</span>
-      </a>
-      <a href="https://www.lifeintelligencegroup.com/" target="_blank" rel="noopener" class="footer-partner-link footer-partner-link--light" aria-label="Life Intelligence Group">
-        <img src="LIG-logo.png" alt="Life Intelligence Group" class="footer-partner-logo footer-partner-logo--light" />
-        <span class="footer-partner-desc">Life Intelligence Group</span>
-      </a>
-      <a href="https://evologics.ai/" target="_blank" rel="noopener" class="footer-partner-link footer-partner-link--light" aria-label="EvoLogics">
-        <img src="evologics-logo.png" alt="EvoLogics" class="footer-partner-logo footer-partner-logo--light footer-partner-logo--portrait" />
-        <span class="footer-partner-desc">EvoLogics</span>
-      </a>
-    </div>
     <div class="container footer-inner">
       <div class="footer-brand"><img src="logo.png" alt="AWI Partners" style="height:36px;width:auto;" /></div>
       <p class="footer-copy">© 2026 AWI Partners, Africa Workforce Intelligence. Mauritius &amp; Global.</p>
@@ -1656,6 +1853,35 @@
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach(el => observer.observe(el));
+
+    /* ── Stats counter ──────────────────────────────────── */
+    (function initCounters() {
+      var counters = document.querySelectorAll('.stat-num[data-target]');
+      if (!counters.length) return;
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          var el = entry.target;
+          var target = parseInt(el.dataset.target, 10);
+          observer.unobserve(el);
+          if (prefersReduced) { el.textContent = target; return; }
+          var duration = 1000;
+          var start = null;
+          function step(ts) {
+            if (!start) start = ts;
+            var progress = Math.min((ts - start) / duration, 1);
+            // ease-out cubic
+            var eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.floor(eased * target);
+            if (progress < 1) requestAnimationFrame(step);
+            else el.textContent = target;
+          }
+          requestAnimationFrame(step);
+        });
+      }, { threshold: 0.6 });
+      counters.forEach(function(el) { observer.observe(el); });
+    })();
 
     /* ── Africa Hero Map ────────────────────────────────── */
     (function initAwiMap() {
