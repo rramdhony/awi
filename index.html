@@ -20,7 +20,8 @@
       --cream-dim:    #DDD6C8;
       --amber:        #C8882A;
       --amber-lt:     #E0A84A;
-      --dust:         #8A7E70; /* lightened from #7A6E60 to pass 4.5:1 on dark bg */
+      --amber-deep:   #8F5D18; /* text-safe amber on cream — 4.81:1 */
+      --dust:         #8F8375; /* must hold 4.5:1 on --ink-soft (#1A1916), not just --ink */
       --rule:         rgba(200,136,42,.25);
       --input-border: rgba(200,136,42,.65); /* passes 3:1 UI component requirement */
       --font-disp: 'Cormorant Garamond', Georgia, serif;
@@ -508,16 +509,17 @@
       background: var(--cream);
       color: var(--ink);
     }
-    .section--cream .eyebrow { color: var(--amber); }
+    /* --amber fails contrast on cream (2.57:1) — use the deep variant for text */
+    .section--cream .eyebrow { color: var(--amber-deep); }
     .section--cream .display { color: var(--ink); }
-    .section--cream .display em { color: var(--amber); }
+    .section--cream .display em { color: var(--amber-deep); }
     .section--cream .outcomes-grid { border-color: rgba(14,13,10,.1); }
     .section--cream .outcome-item { border-color: rgba(14,13,10,.1); }
     .section--cream .outcome-item:hover {
       background: rgba(200,136,42,.06);
       box-shadow: inset 0 3px 0 var(--amber);
     }
-    .section--cream .outcome-num { color: var(--amber); }
+    .section--cream .outcome-num { color: #AD721E; } /* 3.46:1 on cream — large-text AA */
     .section--cream .outcome-text { color: rgba(14,13,10,.62); }
     .section--cream .outcome-text strong { color: var(--ink); }
 
@@ -544,14 +546,17 @@
       gap: 4rem;
       flex-wrap: wrap;
     }
+    /* dim logos only — dimming the whole link drops text contrast below AA */
     .partner-link {
       display: flex;
       align-items: center;
       gap: 1rem;
+    }
+    .partner-link .partner-logo {
       opacity: .65;
       transition: opacity .25s;
     }
-    .partner-link:hover { opacity: 1; }
+    .partner-link:hover .partner-logo { opacity: 1; }
     .partner-logo {
       height: 36px;
       width: auto;
@@ -595,7 +600,6 @@
       font-size: 3.5rem;
       font-weight: 300;
       color: var(--amber);
-      opacity: .25;
       line-height: 1;
       margin-bottom: .8rem;
     }
@@ -1020,14 +1024,17 @@
       color: var(--dust);
       flex-shrink: 0;
     }
+    /* dim logos only — dimming the whole link drops text contrast below AA */
     .footer-partner-link {
       display: flex;
       align-items: center;
       gap: 1rem;
+    }
+    .footer-partner-link .footer-partner-logo {
       opacity: 0.7;
       transition: opacity 0.2s;
     }
-    .footer-partner-link:hover { opacity: 1; }
+    .footer-partner-link:hover .footer-partner-logo { opacity: 1; }
     .footer-partner-logo {
       height: 36px;
       width: auto;
@@ -1220,6 +1227,44 @@
       justify-content: center;
       border: 2px solid rgba(200,136,42,.4);
       border-radius: 50%;
+    }
+
+    /* ── MOBILE TYPE FLOOR (Studio26 QA: no text below 14px on mobile) ── */
+    @media (max-width: 767px) {
+      .skip-link,
+      .eyebrow,
+      .nav-links a,
+      .btn,
+      .btn--lg,
+      .awi-tooltip-name,
+      .awi-tooltip-badge,
+      .hero-tag,
+      .hero-scroll,
+      .stat-label,
+      .partners-section-label,
+      .partner-desc,
+      .service-idx,
+      .case-country,
+      .founder-role,
+      .cred,
+      .form-hint,
+      .form-error,
+      .footer-partners-label,
+      .footer-partner-desc,
+      .footer-copy,
+      .footer-links a,
+      .footer-credit,
+      .founder-linkedin {
+        font-size: .875rem;
+      }
+      .step p,
+      .case-outcomes li {
+        font-size: .9rem;
+      }
+      /* decorative map hub label (map itself is hidden below 900px) */
+      .awi-map-wrap text {
+        font-size: 14px;
+      }
     }
   </style>
 </head>
@@ -1700,7 +1745,7 @@
         <input type="hidden" name="access_key" value="c82a3752-2f2b-42b2-9f97-5b150e00e8c9">
         <input type="hidden" name="subject" value="New AWI Consultation Request">
         <input type="hidden" name="from_name" value="AWI Partners Website">
-        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" aria-label="Leave this field empty">
 
         <p class="form-hint">Fields marked * are required</p>
 

@@ -163,6 +163,10 @@ test.describe('Pillar 2 — Mobile Responsiveness', () => {
 test.describe('Pillar 3 — WCAG 2.1 AA', () => {
 
   test('axe-core: Full WCAG 2.1 AA audit', async ({ page }) => {
+    // Force reduced motion at the page level: entrance animations otherwise
+    // leave axe sampling mid-fade colours, making contrast results flaky.
+    // (The context-level reducedMotion in the config does not apply reliably.)
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto(BASE_URL);
     await page.waitForLoadState('networkidle');
 

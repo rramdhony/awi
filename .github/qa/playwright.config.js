@@ -17,6 +17,9 @@ module.exports = defineConfig({
 
   use: {
     baseURL: 'http://localhost:3000',
+    // Deterministic rendering: entrance animations otherwise leave axe
+    // sampling mid-fade colours, making contrast results flaky.
+    reducedMotion: 'reduce',
     screenshot: 'only-on-failure',
     video: 'off',
     trace: 'retain-on-failure',
